@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #B8860B;
+  --gold-light: #DAA520;
+  --green-madagascar: #007A3D;
+  --dark: #1a1a1a;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f8f8;
+}
+
+.btn-gold {
+  @apply bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-6 rounded transition-all;
+}
+
+.btn-green {
+  @apply bg-green-700 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-all;
+}
