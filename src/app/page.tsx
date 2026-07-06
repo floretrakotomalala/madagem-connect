@@ -1,6 +1,8 @@
 import Navbar from '@/components/layout/Navbar'
 import Carousel from '@/components/ui/Carousel'
+import HeroBanner from '@/components/ui/HeroBanner'
 import GemGrid from '@/components/ui/GemGrid'
+import SubmitSection from '@/components/ui/SubmitSection'
 
 const gemsDemo = [
   { id: '1', nom: 'Saphir Bleu Profond d\'Ilakaka', prix_ar: 12000000, prix_usd: 3100, poids: 2.4, origine: 'Ilakaka', type: 'Saphir Naturel', vendeur: 'Artisans d\'Ilakaka', note: 4.9, verifie: true },
@@ -16,7 +18,9 @@ export default function Home() {
     <main className="min-h-screen bg-gray-50">
       <Navbar />
       <Carousel gems={gemsDemo} />
+      <HeroBanner />
       <GemGrid gems={gemsDemo} />
+      <SubmitSection />
     </main>
   )
 }
