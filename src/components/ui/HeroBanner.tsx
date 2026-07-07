@@ -1,53 +1,66 @@
 'use client'
+import { useState } from 'react'
+
+const PIERRES = [
+  'Alexandrite','Aigue-marine','Améthyste','Apatite','Béryl','Chrysobéryl',
+  'Citrine','Corail','Cornaline','Cristal de roche','Diamant','Émeraude',
+  'Fluorite','Grenat','Grenat rouge','Héliodore','Iolite','Jade','Jaspe',
+  'Kunzite','Labradorite','Lapis-lazuli','Malachite','Morganite','Obsidienne',
+  'Œil-de-tigre','Opale','Orthoclase','Péridot','Pierre de lune','Quartz fumé',
+  'Quartz rose','Rhodolite','Rose des sables','Rubis','Saphir','Saphir jaune',
+  'Saphir rose','Saphir violet','Scapolite','Spinelle','Tanzanite','Topaze',
+  'Tourmaline','Tourmaline multicolore','Turquoise','Zircon','Zoisite',
+]
+
+const TAGS = ['Rubis','Saphir','Tourmaline','Émeraude','Spinelle','Alexandrite']
 
 export default function HeroBanner() {
+  const [selected, setSelected] = useState('')
+
   return (
-    <div className="relative w-full overflow-hidden" style={{background: 'linear-gradient(135deg, #0a2e1a 0%, #1a4a2e 40%, #0d3320 70%, #071a0f 100%)', minHeight: '220px'}}>
+    <section style={{background:'linear-gradient(160deg,var(--green) 0%,var(--green-dark) 100%)',padding:'40px 20px 50px',textAlign:'center'}}>
       
-      {/* Cercles décoratifs */}
-      <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full opacity-10" style={{background: 'radial-gradient(circle, #DAA520, transparent)'}} />
-      <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full opacity-10" style={{background: 'radial-gradient(circle, #4ade80, transparent)'}} />
-      
-      {/* Pierres décoratives flottantes */}
-      <div className="absolute top-4 right-4 text-4xl opacity-30 rotate-12">💎</div>
-      <div className="absolute bottom-4 right-16 text-3xl opacity-20 -rotate-12">🔴</div>
-      <div className="absolute top-8 right-24 text-2xl opacity-25 rotate-6">💚</div>
+      <div style={{display:'inline-flex',alignItems:'center',gap:'6px',background:'rgba(201,162,39,0.12)',border:'1px solid var(--gold-dim)',borderRadius:'20px',padding:'5px 14px',fontSize:'11px',color:'var(--gold)',letterSpacing:'1.8px',textTransform:'uppercase',marginBottom:'20px'}}>
+        <span style={{width:'7px',height:'7px',borderRadius:'50%',background:'var(--gold)',display:'inline-block',animation:'pulse 2s infinite'}}></span>
+        Madagascar · Authentique · Certifié
+      </div>
 
-      {/* Contenu */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-12">
-        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1 mb-4">
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-          <span className="text-green-300 text-xs font-medium tracking-wider">MADAGASCAR • AUTHENTIQUE • CERTIFIÉ</span>
+      <h1 style={{fontFamily:'Playfair Display,serif',color:'var(--cream)',fontSize:'27px',fontWeight:900,lineHeight:1.22,marginBottom:'10px'}}>
+        Trouvez des <em style={{color:'var(--gold)',fontStyle:'normal'}}>pierres précieuses</em><br/>authentiques à Madagascar
+      </h1>
+      <p style={{color:'rgba(250,250,247,0.6)',fontSize:'13px',marginBottom:'28px',lineHeight:1.7}}>
+        Inspectez en personne avant d'acheter
+      </p>
+
+      <div style={{background:'rgba(255,255,255,0.07)',border:'1px solid var(--gold-dim)',borderRadius:'14px',padding:'18px'}}>
+        <span style={{color:'var(--gold)',fontSize:'11px',letterSpacing:'1.2px',textTransform:'uppercase',marginBottom:'10px',display:'block',fontWeight:500}}>
+          Rechercher une pierre
+        </span>
+        <div style={{display:'flex',gap:'8px'}}>
+          <select
+            value={selected}
+            onChange={e => setSelected(e.target.value)}
+            style={{flex:1,background:'#fff',border:'1.5px solid #d8d8d0',borderRadius:'8px',padding:'11px 32px 11px 12px',fontSize:'14px',color:'var(--text)',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B4332' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 12px center'}}
+          >
+            <option value="">— Toutes les pierres —</option>
+            {PIERRES.map(p => <option key={p}>{p}</option>)}
+          </select>
+          <button style={{background:'var(--gold)',color:'#1a1000',border:'none',borderRadius:'8px',padding:'11px 18px',fontSize:'14px',fontWeight:600,cursor:'pointer',whiteSpace:'nowrap'}}>
+            Chercher
+          </button>
         </div>
-        
-        <h1 className="text-white font-black text-2xl md:text-4xl uppercase leading-tight mb-2">
-          Trouvez des pierres précieuses
-        </h1>
-        <h1 className="font-black text-2xl md:text-4xl uppercase leading-tight mb-4" style={{color: '#DAA520'}}>
-          authentiques à Madagascar.
-        </h1>
-        <p className="text-gray-300 text-sm md:text-base max-w-md">
-          Inspectez en personne avant d'acheter. Vendeurs vérifiés. Certificats authentiques.
-        </p>
 
-        <div className="flex items-center gap-6 mt-6">
-          <div className="text-center">
-            <div className="text-white font-black text-xl">500+</div>
-            <div className="text-gray-400 text-xs">Annonces</div>
-          </div>
-          <div className="w-px h-8 bg-white/20"></div>
-          <div className="text-center">
-            <div className="text-white font-black text-xl">120+</div>
-            <div className="text-gray-400 text-xs">Vendeurs vérifiés</div>
-          </div>
-          <div className="w-px h-8 bg-white/20"></div>
-          <div className="text-center">
-            <div className="text-white font-black text-xl">15+</div>
-            <div className="text-gray-400 text-xs">Types de pierres</div>
-          </div>
+        <div style={{display:'flex',flexWrap:'wrap',gap:'7px',marginTop:'14px'}}>
+          {TAGS.map(tag => (
+            <span key={tag} onClick={() => setSelected(tag)}
+              style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.18)',borderRadius:'16px',padding:'5px 13px',fontSize:'11px',color:'rgba(250,250,247,0.7)',cursor:'pointer'}}>
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
 
-    </div>
+      <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}`}</style>
+    </section>
   )
 }
