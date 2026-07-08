@@ -26,8 +26,10 @@ export default function GemsGrid() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
         {pierres.map(p => (
-          <div
+          <a
             key={p.id}
+            href={`/pierres/${p.id}`}
+            style={{textDecoration:"none",color:"inherit",display:"block"}}
             className="rounded-xl overflow-hidden shadow-sm border"
             style={{ borderColor: 'var(--gold)', background: 'white' }}
           >
