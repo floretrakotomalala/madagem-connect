@@ -34,11 +34,7 @@ export default function GemsGrid() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
         {pierres.map(p => (
-          <div
-            key={p.id}
-            className="rounded-xl overflow-hidden shadow-sm border"
-            style={{ borderColor: 'var(--gold)', background: 'white' }}
-          >
+          <div key={p.id} className="rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: 'var(--gold)', background: 'white' }}>
             {p.photos?.[0] ? (
               <img src={p.photos[0].url} alt={p.type} loading="lazy" className="w-full h-36 object-cover"/>
             ) : (
@@ -75,57 +71,43 @@ export default function GemsGrid() {
         </div>
       )}
 
-      {/* Modal contact */}
       {selected && (
-        <div
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }}
-          onClick={() => setSelected(null)}
-        >
-          <div
-            style={{ background: 'white', borderRadius: '20px 20px 0 0', padding: '24px 20px', width: '100%' }}
-            onClick={e => e.stopPropagation()}
-          >
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }} onClick={() => setSelected(null)}>
+          <div style={{ background: 'white', borderRadius: '20px 20px 0 0', padding: '24px 20px', width: '100%' }} onClick={e => e.stopPropagation()}>
             <div style={{ width: '40px', height: '4px', background: '#ddd', borderRadius: '2px', margin: '0 auto 20px' }}/>
-            
             <p style={{ fontFamily: 'Playfair Display,serif', fontSize: '18px', fontWeight: 700, color: 'var(--green)', marginBottom: '4px' }}>
               {selected.type}
             </p>
             <p style={{ fontSize: '13px', color: 'rgba(0,0,0,0.45)', marginBottom: '4px' }}>
-              {selected.region} {selected.poids_carats && `· ${selected.poids_carats} ct`}
+              {selected.region}{selected.poids_carats ? ' · ' + selected.poids_carats + ' ct' : ''}
             </p>
             {selected.prix_min && (
-              <p style={{ fontSize: '18px', fontWeight: 700, color: 'var(--gold)', marginBottom: '20px' }}>
+              <p style={{ fontSize: '18px', fontWeight: 700, color: 'var(--gold)', marginBottom: '16px' }}>
                 {selected.prix_min.toLocaleString()} Ar
               </p>
             )}
-
             {selected.description && (
               <p style={{ fontSize: '13px', color: '#555', marginBottom: '20px', lineHeight: 1.6 }}>
                 {selected.description}
               </p>
             )}
-
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               
-                href={`https://wa.me/${getWhatsApp(selected.vendeur_telephone || selected.vendeurs?.telephone)}?text=Bonjour, je suis intéressé par votre ${selected.type} sur MadaGem Connect.`}
+                href={'https://wa.me/' + getWhatsApp(selected.vendeurs?.telephone) + '?text=Bonjour, je suis interesse par votre ' + selected.type + ' sur MadaGem Connect.'}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#25D366', color: 'white', borderRadius: '12px', padding: '14px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}
               >
-                💬 Contacter sur WhatsApp
+                WhatsApp
               </a>
               
-                href={`tel:${getTel(selected.vendeur_telephone || selected.vendeurs?.telephone)}`}
+                href={'tel:' + getTel(selected.vendeurs?.telephone)}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'var(--green)', color: 'white', borderRadius: '12px', padding: '14px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}
               >
-                📞 Appeler le vendeur
+                Appeler le vendeur
               </a>
             </div>
-
-            <button
-              onClick={() => setSelected(null)}
-              style={{ width: '100%', marginTop: '12px', padding: '12px', background: 'none', border: '1px solid #ddd', borderRadius: '12px', fontSize: '14px', color: '#999', cursor: 'pointer' }}
-            >
+            <button onClick={() => setSelected(null)} style={{ width: '100%', marginTop: '12px', padding: '12px', background: 'none', border: '1px solid #ddd', borderRadius: '12px', fontSize: '14px', color: '#999', cursor: 'pointer' }}>
               Fermer
             </button>
           </div>
