@@ -9,6 +9,7 @@ export type Pierre = {
   poids_carats: number | null
   description: string | null
   photos: { url: string; ordre: number }[]
+  vendeurs: { nom: string; telephone: string | null } | null
 }
 
 export function useGems(page = 0) {
@@ -23,7 +24,7 @@ export function useGems(page = 0) {
       const supabase = createClient()
       const { data, error } = await supabase
         .from('pierres')
-        .select('id, type, region, prix_min, poids_carats, description, photos(url, ordre)')
+        .select('id, type, region, prix_min, poids_carats, description, photos(url, ordre), vendeurs(nom, telephone)')
         .eq('statut', 'active')
         .order('created_at', { ascending: false })
         .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1)
