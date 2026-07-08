@@ -26,45 +26,48 @@ export default function GemsGrid() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
         {pierres.map(p => (
-          <a
+          
             key={p.id}
             href={`/pierres/${p.id}`}
-            style={{textDecoration:"none",color:"inherit",display:"block"}}
-            className="rounded-xl overflow-hidden shadow-sm border"
-            style={{ borderColor: 'var(--gold)', background: 'white' }}
+            style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
           >
-            {p.photos?.[0] ? (
-              <img
-                src={p.photos[0].url}
-                alt={p.type}
-                loading="lazy"
-                className="w-full h-36 object-cover"
-              />
-            ) : (
-              <div
-                className="w-full h-36 flex items-center justify-center text-3xl"
-                style={{ background: 'var(--green)' }}
-              >
-                💎
-              </div>
-            )}
-            <div className="p-3">
-              <p className="font-semibold text-sm" style={{ color: 'var(--green)' }}>
-                {p.type}
-              </p>
-              {p.region && (
-                <p className="text-xs opacity-60 mt-0.5">{p.region}</p>
+            <div
+              className="rounded-xl overflow-hidden shadow-sm border h-full"
+              style={{ borderColor: 'var(--gold)', background: 'white' }}
+            >
+              {p.photos?.[0] ? (
+                <img
+                  src={p.photos[0].url}
+                  alt={p.type}
+                  loading="lazy"
+                  className="w-full h-36 object-cover"
+                />
+              ) : (
+                <div
+                  className="w-full h-36 flex items-center justify-center text-3xl"
+                  style={{ background: 'var(--green)' }}
+                >
+                  💎
+                </div>
               )}
-              {p.poids_carats && (
-                <p className="text-xs opacity-60">{p.poids_carats} ct</p>
-              )}
-              {p.prix_min && (
-                <p className="text-sm font-bold mt-1" style={{ color: 'var(--gold)' }}>
-                  À partir de {p.prix_min.toLocaleString()} Ar
+              <div className="p-3">
+                <p className="font-semibold text-sm" style={{ color: 'var(--green)' }}>
+                  {p.type}
                 </p>
-              )}
+                {p.region && (
+                  <p className="text-xs opacity-60 mt-0.5">{p.region}</p>
+                )}
+                {p.poids_carats && (
+                  <p className="text-xs opacity-60">{p.poids_carats} ct</p>
+                )}
+                {p.prix_min && (
+                  <p className="text-sm font-bold mt-1" style={{ color: 'var(--gold)' }}>
+                    À partir de {p.prix_min.toLocaleString()} Ar
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
 
