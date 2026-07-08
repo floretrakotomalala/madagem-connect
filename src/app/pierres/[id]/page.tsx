@@ -54,6 +54,14 @@ export default function PierrePage() {
     </div>
   )
 
+  const [signale, setSignale] = useState(false)
+
+  async function handleSignaler() {
+    const supabase = createClient()
+    await supabase.rpc('incrementer_signalement', { pierre_id: pierre.id })
+    setSignale(true)
+  }
+
   const photos = pierre.photos?.sort((a, b) => a.ordre - b.ordre) || []
   const tel = pierre.vendeurs?.telephone?.replace(/\s/g, '') || ''
   const wa = tel.startsWith('0') ? '261' + tel.slice(1) : tel
@@ -140,6 +148,15 @@ export default function PierrePage() {
               Appeler le vendeur
             </a>
           </div>
+        )}
+      </div>
+        {!signale ? (
+          <button onClick={handleSignaler}
+            style={{ width: '100%', marginTop: '12px', padding: '12px', background: 'none', border: '1px solid #ddd', borderRadius: '12px', fontSize: '13px', color: '#999', cursor: 'pointer' }}>
+            Signaler cette annonce
+          </button>
+        ) : (
+          <p style={{ textAlign: 'center', fontSize: '13px', color: '#999', marginTop: '12px' }}>Annonce signalée — merci</p>
         )}
       </div>
     </div>
