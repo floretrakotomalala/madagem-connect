@@ -66,7 +66,7 @@ export default function GemsGrid() {
           const wa = tel.startsWith('0') ? '261' + tel.slice(1) : tel
           const msg = encodeURIComponent('Bonjour, je suis interesse par votre ' + p.type + ' sur MadaGem Connect.')
           return (
-            <div key={p.id} className="rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: 'var(--gold)', background: 'white' }}>
+            <a key={p.id} href={'/pierres/' + p.id} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}><div className="rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: 'var(--gold)', background: 'white' }}>
               {p.photos?.[0] ? (
                 <img src={p.photos[0].url} alt={p.type} loading="lazy" className="w-full h-36 object-cover"/>
               ) : (
@@ -98,6 +98,7 @@ export default function GemsGrid() {
               </div>
             </div>
           )
+        </div></a>
         })}
       </div>
 
