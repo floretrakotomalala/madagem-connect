@@ -12,10 +12,12 @@ export default function GemsGrid() {
     return tel.replace(/\s/g, '')
   }
 
-  function getWhatsApp(tel: string | null) {
-    if (!tel) return ''
+  function getWhatsAppUrl(tel: string | null, type: string) {
+    if (!tel) return '#'
     const t = tel.replace(/\s/g, '')
-    return t.startsWith('0') ? '261' + t.slice(1) : t
+    const num = t.startsWith('0') ? '261' + t.slice(1) : t
+    const msg = encodeURIComponent('Bonjour, je suis interesse par votre ' + type + ' sur MadaGem Connect.')
+    return 'https://wa.me/' + num + '?text=' + msg
   }
 
   return (
@@ -79,7 +81,7 @@ export default function GemsGrid() {
               {selected.type}
             </p>
             <p style={{ fontSize: '13px', color: 'rgba(0,0,0,0.45)', marginBottom: '4px' }}>
-              {selected.region}{selected.poids_carats ? ' · ' + selected.poids_carats + ' ct' : ''}
+              {selected.region}{selected.poids_carats ? ' - ' + selected.poids_carats + ' ct' : ''}
             </p>
             {selected.prix_min && (
               <p style={{ fontSize: '18px', fontWeight: 700, color: 'var(--gold)', marginBottom: '16px' }}>
@@ -93,7 +95,7 @@ export default function GemsGrid() {
             )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               
-                href={'https://wa.me/' + getWhatsApp(selected.vendeurs?.telephone) + '?text=Bonjour, je suis interesse par votre ' + selected.type + ' sur MadaGem Connect.'}
+                href={getWhatsAppUrl(selected.vendeurs?.telephone, selected.type)}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#25D366', color: 'white', borderRadius: '12px', padding: '14px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}
