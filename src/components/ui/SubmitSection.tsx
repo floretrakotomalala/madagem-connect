@@ -20,9 +20,13 @@ export default function SubmitSection() {
 
   useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) setUserId(data.user.id)
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user) setUserId(data.session.user.id)
     })
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id ?? null)
+    })
+    return () => listener.subscription.unsubscribe()
   }, [])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
