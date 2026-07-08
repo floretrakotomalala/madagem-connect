@@ -1,18 +1,58 @@
 'use client'
 import { useState } from 'react'
-import { useGems } from '@/hooks/useGems'
+import { useSearch } from '@/hooks/useSearch'
+
+const PIERRES = ['','Alexandrite','Aigue-marine','Amethyste','Beryl','Diamant','Emeraude','Grenat','Kunzite','Labradorite','Morganite','Opale','Peridot','Rubis','Saphir','Spinelle','Tanzanite','Topaze','Tourmaline','Zircon','Autre']
+const REGIONS = ['','Ambatondrazaka','Andilamena','Antananarivo','Fianarantsoa','Ilakaka','Mahajanga','Mananjary','Moramanga','Nosy Be','Toamasina','Toliara','Autre']
 
 export default function GemsGrid() {
   const [page, setPage] = useState(0)
-  const { pierres, loading, hasMore } = useGems(page)
+  const [type, setType] = useState('')
+  const [region, setRegion] = useState('')
+  const { pierres, loading, hasMore } = useSearch(type, region, page)
+
+  function handleFilter(newType: string, newRegion: string) {
+    setPage(0)
+    setType(newType)
+    setRegion(newRegion)
+  }
 
   return (
     <section className="py-12 px-4" style={{ background: 'var(--cream)' }}>
-      <h2 className="text-2xl font-bold mb-6 text-center" style={{ color: 'var(--green)' }}>
+      <h2 className="text-2xl font-bold mb-4 text-center" style={{ color: 'var(--green)' }}>
         Pierres disponibles
       </h2>
 
-      {loading && (
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', overflowX: 'auto', paddingBottom: '4px' }}>
+        <select
+          value={type}
+          onChange={e => handleFilter(e.target.value, region)}
+          style={{ padding: '8px 12px', borderRadius: '20px', border: '1px solid var(--gold)', background: 'white', fontSize: '13px', color: 'var(--green)', outline: 'none', cursor: 'pointer', flexShrink: 0 }}
+        >
+          <option value="">Tous les types</option>
+          {PIERRES.filter(p => p).map(p => <option key={p} value={p}>{p}</option>)}
+        </select>
+
+        <select
+          value={region}
+          onChange={e => handleFilter(type, e.target.value)}
+          style={{ padding: '8px 12px', borderRadius: '20px', border: '1px solid var(--gold)', background: 'white', fontSize: '13px', color: 'var(--green)', outline: 'none', cursor: 'pointer', flexShrink: 0 }}
+        >
+          <option value="">Toutes les regions</option>
+          {REGIONS.filter(r => r).map(r => <option key={r} value={r}>{r}</option>)}
+        </select>
+
+        {(type || region) && (
+          <button
+            onClick={() => handleFilter('', '')}
+            style={{ padding: '8px 12px', borderRadius: '20px', border: '1px solid #ddd', background: 'white', fontSize: '13px', color: '#999', cursor: 'pointer', flexShrink: 0 }}
+          >
+            Effacer
+          </button>
+        )}
+      </div>
+
+      {loading && page === 0 && (
         <div className="text-center py-8" style={{ color: 'var(--green)' }}>Chargement...</div>
       )}
 
@@ -67,6 +107,10 @@ export default function GemsGrid() {
             Voir plus
           </button>
         </div>
+      )}
+
+      {loading && page > 0 && (
+        <div className="text-center py-4" style={{ color: 'var(--green)' }}>Chargement...</div>
       )}
     </section>
   )
