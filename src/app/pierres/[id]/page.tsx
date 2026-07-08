@@ -22,6 +22,7 @@ export default function PierrePage() {
   const [pierre, setPierre] = useState<Pierre | null>(null)
   const [loading, setLoading] = useState(true)
   const [photoIdx, setPhotoIdx] = useState(0)
+  const [signale, setSignale] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -36,6 +37,12 @@ export default function PierrePage() {
     }
     load()
   }, [id])
+
+  async function handleSignaler() {
+    const supabase = createClient()
+    await supabase.rpc('incrementer_signalement', { pierre_id: id })
+    setSignale(true)
+  }
 
   if (loading) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--cream)' }}>
@@ -54,16 +61,8 @@ export default function PierrePage() {
     </div>
   )
 
-  const [signale, setSignale] = useState(false)
-
-  async function handleSignaler() {
-    const supabase = createClient()
-    await supabase.rpc('incrementer_signalement', { pierre_id: pierre.id })
-    setSignale(true)
-  }
-
   const photos = pierre.photos?.sort((a, b) => a.ordre - b.ordre) || []
-  const tel = pierre.vendeurs?.telephone?.replace(/\s/g, '') || ''
+  const tel = pierre.vendeurs?.telephone?.replace(/[^0-9]/g, '') || ''
   const wa = tel.startsWith('0') ? '261' + tel.slice(1) : tel
   const msg = encodeURIComponent('Bonjour, je suis interesse par votre ' + pierre.type + ' sur MadaGem Connect.')
 
@@ -84,7 +83,7 @@ export default function PierrePage() {
           {photos.length > 1 && (
             <div style={{ display: 'flex', gap: '8px', padding: '10px 16px', overflowX: 'auto' }}>
               {photos.map((p, i) => (
-                <img key={i} src={p.url} alt={"photo " + (i+1)} onClick={() => setPhotoIdx(i)}
+                <img key={i} src={p.url} alt={'photo ' + (i+1)} onClick={() => setPhotoIdx(i)}
                   style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', cursor: 'pointer', flexShrink: 0, border: photoIdx === i ? '2px solid var(--gold)' : '2px solid transparent' }}/>
               ))}
             </div>
@@ -149,15 +148,17 @@ export default function PierrePage() {
             </a>
           </div>
         )}
-      </div>
-        {!signale ? (
-          <button onClick={handleSignaler}
-            style={{ width: '100%', marginTop: '12px', padding: '12px', background: 'none', border: '1px solid #ddd', borderRadius: '12px', fontSize: '13px', color: '#999', cursor: 'pointer' }}>
-            Signaler cette annonce
-          </button>
-        ) : (
-          <p style={{ textAlign: 'center', fontSize: '13px', color: '#999', marginTop: '12px' }}>Annonce signalée — merci</p>
-        )}
+
+        <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #eee' }}>
+          {!signale ? (
+            <button onClick={handleSignaler}
+              style={{ width: '100%', padding: '10px', background: 'none', border: '1px solid #ddd', borderRadius: '10px', fontSize: '13px', color: '#999', cursor: 'pointer' }}>
+              Signaler cette annonce
+            </button>
+          ) : (
+            <p style={{ textAlign: 'center', fontSize: '13px', color: '#999' }}>Annonce signalée — merci</p>
+          )}
+        </div>
       </div>
     </div>
   )
