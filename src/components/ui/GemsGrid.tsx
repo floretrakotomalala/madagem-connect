@@ -98,16 +98,10 @@ export default function GemsGrid() {
                 href={getWhatsAppUrl(selected.vendeurs?.telephone, selected.type)}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#25D366', color: 'white', borderRadius: '12px', padding: '14px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}
-              >
-                WhatsApp
-              </a>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: '#25D366', color: 'white', borderRadius: '12px', padding: '14px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}>WhatsApp</a>
               
                 href={'tel:' + getTel(selected.vendeurs?.telephone)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'var(--green)', color: 'white', borderRadius: '12px', padding: '14px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}
-              >
-                Appeler le vendeur
-              </a>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', background: 'var(--green)', color: 'white', borderRadius: '12px', padding: '14px', fontWeight: 700, fontSize: '15px', textDecoration: 'none' }}>Appeler le vendeur</a>
             </div>
             <button onClick={() => setSelected(null)} style={{ width: '100%', marginTop: '12px', padding: '12px', background: 'none', border: '1px solid #ddd', borderRadius: '12px', fontSize: '14px', color: '#999', cursor: 'pointer' }}>
               Fermer
