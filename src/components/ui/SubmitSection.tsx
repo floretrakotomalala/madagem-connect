@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 
 const PIERRES = ['Alexandrite','Aigue-marine','Améthyste','Béryl','Diamant','Émeraude','Grenat','Kunzite','Labradorite','Morganite','Opale','Péridot','Rubis','Saphir','Spinelle','Tanzanite','Topaze','Tourmaline','Zircon','Autre']
@@ -11,11 +11,19 @@ export default function SubmitSection() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [userId, setUserId] = useState<string | null>(null)
 
   const [form, setForm] = useState({
     type: '', poids: '', prix: '', region: '',
     description: '', nom: '', telephone: '', email: ''
   })
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) setUserId(data.user.id)
+    })
+  }, [])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }))
@@ -46,40 +54,26 @@ export default function SubmitSection() {
       return
     }
 
+    if (!userId) {
+      setError('Tu dois être connecté pour publier. Va sur /auth pour te connecter.')
+      return
+    }
+
     setLoading(true)
     const supabase = createClient()
 
     try {
-      // Vérifier si connecté
-      const { data: { user } } = await supabase.auth.getUser()
+      await supabase.from('vendeurs').upsert({
+        id: userId,
+        nom: form.nom,
+        telephone: form.telephone,
+        region: form.region
+      }, { onConflict: 'id' })
 
-      let vendeurId: string
-
-      if (user) {
-        vendeurId = user.id
-        // Créer profil vendeur si pas encore fait
-        await supabase.from('vendeurs').upsert({
-          id: user.id,
-          nom: form.nom,
-          telephone: form.telephone,
-          region: form.region
-        }, { onConflict: 'id' })
-      } else {
-        // Vendeur non connecté — créer compte via OTP silencieux
-        const { data: signUp } = await supabase.auth.signInWithOtp({
-          email: form.email || `${form.telephone}@madagem.mg`,
-          options: { shouldCreateUser: true }
-        })
-        setError('Vérifie ton email pour confirmer et publier ton annonce.')
-        setLoading(false)
-        return
-      }
-
-      // Créer la pierre
       const { data: pierre, error: pierreErr } = await supabase
         .from('pierres')
         .insert({
-          vendeur_id: vendeurId,
+          vendeur_id: userId,
           type: form.type,
           poids_carats: parseFloat(form.poids),
           prix_min: parseInt(form.prix.replace(/\s/g, '')),
@@ -92,21 +86,17 @@ export default function SubmitSection() {
 
       if (pierreErr) throw pierreErr
 
-      // Upload photos
       for (let i = 0; i < photos.length; i++) {
         const file = photos[i]
         const ext = file.name.split('.').pop()
         const path = `${pierre.id}/${Date.now()}-${i}.${ext}`
-
         const { error: upErr } = await supabase.storage
           .from('photos-pierres')
           .upload(path, file, { cacheControl: '3600' })
-
         if (!upErr) {
           const { data: urlData } = supabase.storage
             .from('photos-pierres')
             .getPublicUrl(path)
-
           await supabase.from('photos').insert({
             pierre_id: pierre.id,
             url: urlData.publicUrl,
@@ -140,10 +130,8 @@ export default function SubmitSection() {
         <p style={{color:'rgba(250,250,247,0.6)',fontSize:'14px',marginBottom:'24px'}}>
           Ta pierre est maintenant visible sur MadaGem Connect
         </p>
-        <button
-          onClick={() => setSuccess(false)}
-          style={{background:'var(--gold)',color:'#1a1000',border:'none',borderRadius:'10px',padding:'12px 24px',fontSize:'14px',fontWeight:700,cursor:'pointer'}}
-        >
+        <button onClick={() => setSuccess(false)}
+          style={{background:'var(--gold)',color:'#1a1000',border:'none',borderRadius:'10px',padding:'12px 24px',fontSize:'14px',fontWeight:700,cursor:'pointer'}}>
           Publier une autre pierre
         </button>
       </div>
@@ -158,6 +146,12 @@ export default function SubmitSection() {
       <p style={{color:'rgba(250,250,247,0.5)',fontSize:'13px',marginBottom:'20px'}}>
         Vendeur ? Publiez votre pierre en 2 minutes.
       </p>
+
+      {!userId && (
+        <div style={{background:'rgba(201,162,39,0.15)',border:'1px solid rgba(201,162,39,0.3)',borderRadius:'8px',padding:'10px 14px',marginBottom:'14px',fontSize:'13px',color:'var(--gold)'}}>
+          <a href="/auth" style={{color:'var(--gold)',fontWeight:700}}>Connecte-toi</a> pour publier ton annonce
+        </div>
+      )}
 
       {error && (
         <div style={{background:'rgba(255,100,100,0.15)',border:'1px solid rgba(255,100,100,0.3)',borderRadius:'8px',padding:'10px 14px',marginBottom:'14px',fontSize:'13px',color:'#ffaaaa'}}>
@@ -232,12 +226,9 @@ export default function SubmitSection() {
         </div>
       </div>
 
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        style={{width:'100%',background:'var(--gold)',color:'#1a1000',border:'none',borderRadius:'10px',padding:'15px',fontSize:'15px',fontWeight:700,cursor:loading?'not-allowed':'pointer',fontFamily:'Playfair Display,serif',letterSpacing:'.5px',marginTop:'8px',opacity:loading?0.7:1}}
-      >
-        {loading ? 'Publication en cours...' : 'Publier mon offre'}
+      <button onClick={handleSubmit} disabled={loading || !userId}
+        style={{width:'100%',background:'var(--gold)',color:'#1a1000',border:'none',borderRadius:'10px',padding:'15px',fontSize:'15px',fontWeight:700,cursor:loading||!userId?'not-allowed':'pointer',fontFamily:'Playfair Display,serif',letterSpacing:'.5px',marginTop:'8px',opacity:loading||!userId?0.6:1}}>
+        {loading ? 'Publication en cours...' : !userId ? 'Connecte-toi pour publier' : 'Publier mon offre'}
       </button>
     </section>
   )
