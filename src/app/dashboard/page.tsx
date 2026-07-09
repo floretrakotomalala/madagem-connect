@@ -72,10 +72,15 @@ export default function Dashboard() {
           <h1 style={{ color: 'white', fontWeight: 700, fontSize: '16px' }}>Mon espace</h1>
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px' }}>{user?.email}</p>
         </div>
-        <button onClick={handleLogout}
-          style={{ color: 'white', background: 'none', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', cursor: 'pointer' }}>
-          Déconnexion
-        </button>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <a href="/admin" style={{ color: 'var(--gold)', border: '1px solid rgba(201,162,39,0.4)', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', textDecoration: 'none' }}>
+            Admin
+          </a>
+          <button onClick={handleLogout}
+            style={{ color: 'white', background: 'none', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', cursor: 'pointer' }}>
+            Déconnexion
+          </button>
+        </div>
       </div>
 
       <div style={{ padding: '16px' }}>
