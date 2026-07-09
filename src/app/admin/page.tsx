@@ -99,7 +99,19 @@ export default function AdminPage() {
     setVendeurs(v => v.map(x => x.id === id ? { ...x, banni: false, raison_ban: null } : x))
   }
 
-  if (loading || !isAdmin) return (
+  if (loading) return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0d1117' }}>
+      <p style={{ color: 'white' }}>Vérification...</p>
+    </div>
+  )
+
+  if (!isAdmin) return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0d1117' }}>
+      <p style={{ color: '#f85149' }}>Accès refusé</p>
+    </div>
+  )
+
+  if (false) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0d1117' }}>
       <p style={{ color: 'white' }}>Vérification...</p>
     </div>
