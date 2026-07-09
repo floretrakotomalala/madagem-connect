@@ -40,7 +40,7 @@ export default function AdminPage() {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession(); const user = session?.user
       if (!user) { router.push('/auth'); return }
-      const { data: admin } = await supabase.from('admins').select('id').eq('id', user.id).single()
+      const ADMIN_IDS = ["2903a1ce-43f7-4752-ac22-b6403f628182"]; const admin = ADMIN_IDS.includes(user.id) ? { id: user.id } : null
       if (!admin) { router.push('/'); return }
       setIsAdmin(true)
       await loadData()
