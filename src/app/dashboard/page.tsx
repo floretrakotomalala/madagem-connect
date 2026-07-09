@@ -73,7 +73,7 @@ export default function Dashboard() {
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px' }}>{user?.email}</p>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <a href="/admin" style={{ color: 'var(--gold)', border: '1px solid rgba(201,162,39,0.4)', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', textDecoration: 'none' }}>
+          <a href={"/admin?uid=" + user?.id} style={{ color: 'var(--gold)', border: '1px solid rgba(201,162,39,0.4)', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', textDecoration: 'none' }}>
             Admin
           </a>
           <button onClick={handleLogout}

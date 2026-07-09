@@ -36,6 +36,7 @@ export default function AdminPage() {
   const [banTarget, setBanTarget] = useState<string | null>(null)
 
   useEffect(() => {
+    // Lire uid depuis URL si session manquante
     async function check() {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession(); const user = session?.user
